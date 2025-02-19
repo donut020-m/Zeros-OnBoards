@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <button class="nav-btn" onclick="window.location.href='index.html'">Inicio</button>
+    <title>Aventura Industrial De James Watt</title>
+    <style>
+        body { margin: 0; background: #000; }
+        canvas { display: block; }
+        #dialog {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(43, 27, 23, 0.9);
+            color: #d4a559;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+            font-family: 'Georgia', serif;
+            border: 2px solid #8b4513;
+        }
+        #instructions {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(43, 27, 23, 0.9);
+            color: #d4a559;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Georgia', serif;
+            border: 2px solid #8b4513;
+        }
+        #title {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #d4a559;
+            font-family: 'Georgia', serif;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">Aventura Industrial De James Watt</div>
+    <div id="dialog"></div>
+    <div id="instructions">
+        Usa WASD para moverte<br>
+        Presiona E al estar cerca del un inventor para interactuar
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x2b1b17);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create Jorge Watt (player)
+        const createInventor = (isPlayer = false) => {
+            const group = new THREE.Group();
+            
+            // Body (coat)
+            const bodyGeometry = new THREE.BoxGeometry(1, 1.5, 0.7);
+            const bodyMaterial = isPlayer ? 
+                new THREE.MeshBasicMaterial({ color: 0x1a4069 }) : // Blue coat for Jorge
+                new THREE.MeshBasicMaterial({ color: 0x4a2810 }); // Brown coat for NPCs
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 0.75;
+            group.add(body);
+
+            // Head with top hat
+            const headGeometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+            const headMaterial = new THREE.MeshBasicMaterial({ color: 0xd4a559 });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 1.7;
+            group.add(head);
+
+            // Top hat
+            const hatGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.4, 16);
+            const hatMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+            const hat = new THREE.Mesh(hatGeometry, hatMaterial);
+            hat.position.y = 2.1;
+            group.add(hat);
+
+            // Add gear decoration for Jorge
+            if (isPlayer) {
+                const gearGeometry = new THREE.CircleGeometry(0.2, 8);
+                const gearMaterial = new THREE.MeshBasicMaterial({ color: 0xb87333 });
+                const gear = new THREE.Mesh(gearGeometry, gearMaterial);
+                gear.position.set(0.4, 1, 0);
+                group.add(gear);
+            }
+
+            return group;
+        };
+
+        // Create Jorge Watt
+        const player = createInventor(true);
+        scene.add(player);
+
+        // Create NPCs
+        const npcs = [];
+        const npcPositions = [
+            { x: 5, z: 5 },
+            { x: -5, z: 5 },
+            { x: 0, z: -8 }
+        ];
+
+        npcPositions.forEach(pos => {
+            const npc = createInventor();
+            npc.position.set(pos.x, 0, pos.z);
+            scene.add(npc);
+            npcs.push(npc);
+        });
+
+        // Create industrial factory floor
+        const floorGeometry = new THREE.PlaneGeometry(20, 20);
+        const floorTexture = new THREE.TextureLoader().load('/api/placeholder/20/20');
+        const floorMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x5c4033,
+            map: floorTexture
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = Math.PI / 2;
+        scene.add(floor);
+
+        // Add some machinery/decorations
+        const createMachine = (x, z) => {
+            const machine = new THREE.Group();
+            
+            // Base
+            const baseGeometry = new THREE.BoxGeometry(1.5, 2, 1.5);
+            const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x8b4513 });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            machine.add(base);
+
+            // Pipes
+            const pipeGeometry = new THREE.CylinderGeometry(0.1, 0.1, 3, 8);
+            const pipeMaterial = new THREE.MeshBasicMaterial({ color: 0xb87333 });
+            const pipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
+            pipe.position.y = 1.5;
+            machine.add(pipe);
+
+            machine.position.set(x, 1, z);
+            return machine;
+        };
+
+        // Add some machines to the scene
+        const machines = [
+            createMachine(8, 8),
+            createMachine(-8, 8),
+            createMachine(8, -8),
+            createMachine(-8, -8)
+        ];
+        machines.forEach(machine => scene.add(machine));
+
+        camera.position.y = 5;
+        camera.position.z = 10;
+
+        const moveSpeed = 0.1;
+        const keys = {};
+        const dialogElement = document.getElementById('dialog');
+
+        const npcDialogs = [
+            "James Hargreaves: ¡Ah, Jorge Watt! ¿Has visto mi nueva Spinning Jenny? Toda una revolución en la fabricación textil.!",
+            "Richard Arkwright: ¡Buen día! He estado perfeccionando mi marco acuático. ¡El poder del agua impulsará nuestra industria hacia adelante!",
+            "Edmund Cartwright: ¡Jorge, amigo mío! Este telar eléctrico lo cambiará todo. ¡La energía del vapor es el futuro!"
+        ];
+
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key.toLowerCase() === 'e') {
+                checkNPCInteraction();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function checkNPCInteraction() {
+            npcs.forEach((npc, index) => {
+                const distance = player.position.distanceTo(npc.position);
+                if (distance < 2) {
+                    showDialog(npcDialogs[index]);
+                }
+            });
+        }
+
+        function showDialog(text) {
+            dialogElement.textContent = text;
+            dialogElement.style.display = 'block';
+            setTimeout(() => {
+                dialogElement.style.display = 'none';
+            }, 4000);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (keys['w']) player.position.z -= moveSpeed;
+            if (keys['s']) player.position.z += moveSpeed;
+            if (keys['a']) player.position.x -= moveSpeed;
+            if (keys['d']) player.position.x += moveSpeed;
+
+            // Make machines' gears rotate
+            machines.forEach(machine => {
+                machine.rotation.y += 0.01;
+            });
+
+            camera.position.x = player.position.x;
+            camera.position.z = player.position.z + 10;
+            camera.lookAt(player.position);
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
