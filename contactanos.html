@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactanos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #333;
+            color: #FFD700;
+            line-height: 1.6;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background-color: #333;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .navbar h1 {
+            color: #FFD700;
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background-color: #FFD700;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background-color: #FFF;
+            transform: scale(1.05);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFD700;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (min-width: 768px) {
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .navbar h1 {
+                margin: 0;
+            }
+
+            .nav-items {
+                width: auto;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .nav-items {
+                display: none;
+                width: 100%;
+            }
+
+            .nav-items.show {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        /* Contact Page Styles */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: #FFD700;
+        }
+        
+        .contact-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: #444;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            border-radius: 4px;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e6c400;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .icon {
+            width: 50px;
+            height: 50px;
+            background-color: #FFD700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .contact-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-details p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #FFD700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .contact-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <h1>Zeros</h1>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div class="nav-items" id="navItems">
+            <button class="nav-btn" onclick="window.location.href='index.html'">Inicio</button>
+            <button class="nav-btn" onclick="showSection('game-section')">Juego</button>
+            <button class="nav-btn" onclick="showSection('statistics-section')">Unidades</button>
+            <button class="nav-btn" onclick="window.location.href='estadisticas.html'">Estadisticas</button>
+            <button class="nav-btn" onclick="window.location.href='contactanos.html'">Contactanos</button>
+            <button class="nav-btn" onclick="window.location.href='registrate.html'">Registrate</button>
+            <button class="nav-btn" onclick="window.location.href='iniciar sesion.html'">Iniciar Sesion</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Contactanos</h1>
+        
+        <div class="contact-wrapper">
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Tu nombre</label>
+                        <input type="text" id="name" placeholder="Ingrese su nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo</label>
+                        <input type="email" id="email" placeholder="Ingrese su correo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Número telefónico</label>
+                        <input type="tel" id="phone" placeholder="Ingrese su numero telefonico">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" placeholder="Como podemos ayudarle?" required></textarea>
+                    </div>
+                    <button type="submit">Enviar mensaje</button>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-method">
+                    <div class="icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Teléfono</h3>
+                        <p>+57 3022718762</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <p>zerosgaming@gmail.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Dirección</h3>
+                        <p>Cra28 #27sur -42, Medellín, Colombia</p>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Navigation -->
+    <script>
+        function showSection(sectionId) {
+            // Redirect to index.html with section parameter
+            window.location.href = 'index.html#' + sectionId;
+        }
+
+        function toggleMenu() {
+            var navItems = document.getElementById('navItems');
+            navItems.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades</title>
+ <style>
+    .statistics-section {
+        display: none;
+        padding: 1rem;
+        background-color: #333;
+        border-radius: 10px;
+        margin: 1rem;
+    }
+
+    .bar-chart {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-top: 1.5rem;
+    }
+
+    .bar {
+        background-color: #444;
+        height: 35px;
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #FFD700;
+    }
+
+    .bar-fill {
+        background-color: #FFD700;
+        height: 100%;
+        width: 100%;
+        transition: width 0.3s ease;
+    }
+    .bar-unfill{
+        background-color: #FFD700;
+        height: 100%;
+        width: 25%;
+        transition: width 0.3s ease;
+    }
+    .bar-nofill{
+        background-color: #FFD700;
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    .bar-label {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #333;
+        font-weight: bold;
+        z-index: 1;
+        font-size: 0.85rem;
+    }
+    </style>
+</head>
+<body>
+    <div id="statistics-section" class="statistics-section">
+        <h1>Unidades</h1>
+        <div class="bar-chart">
+            <!-- 10 bars for units 1-10 -->
+            <div class="bar">
+                <div class="bar-fill"></div>
+                <span class="bar-label">Unidad 1</span>
+            </div>
+            <div class="bar">
+                <div class="bar-unfill"></div>
+                <span class="bar-label">Unidad 2</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 3</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 4</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 5</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 6</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 7</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 8</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 9</span>
+            </div>
+            <div class="bar">
+                <div class="bar-nofill"></div>
+                <span class="bar-label">Unidad 10</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
