@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Experiencia de la Revolución Industrial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body { 
+            margin: 0; 
+            background: #2b1b17;
+            overflow: hidden;
+            touch-action: none;
+            font-family: 'Georgia', serif;
+        }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #222;
+            color: #FFD700;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 3px solid #FFD700;
+            position: relative;
+            z-index: 101; /* Ensure navbar is above other elements */
+        }
+
+        .navbar h1 {
+            color: #FFD700;
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background-color: #FFD700;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background-color: #FFF;
+            transform: scale(1.05);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFD700;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Auth Pages Styling */
+        .auth-container {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .auth-box {
+            background: rgba(51, 51, 51, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+            color: white;
+            margin: 2rem auto;
+        }
+
+        .auth-title {
+            text-align: center;
+            color: #FFD700;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .auth-input {
+            padding: 0.8rem;
+            border: 2px solid #FFD700;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .auth-button {
+            padding: 1rem;
+            background: #FFD700;
+            border: none;
+            border-radius: 5px;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: white;
+        }
+
+        .google-button {
+            background: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1rem 0;
+            color: #FFD700;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #FFD700;
+        }
+
+        .divider span {
+            padding: 0 1rem;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .terms-text {
+            font-size: 0.9rem;
+            color: #FFD700;
+        }
+
+        .terms-text a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        canvas { display: block; }
+        
+        .ui-element {
+            background: rgba(43, 27, 23, 0.95);
+            color: #d4a559;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        #dialog {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px;
+            max-width: 80%;
+            text-align: center;
+            z-index: 100;
+            display: none;
+        }
+
+        #machine-info {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            padding: 20px;
+            max-width: 300px;
+            z-index: 100;
+            display: none;
+        }
+
+        #machine-info h3 {
+            margin-top: 0;
+            color: #ffd700;
+        }
+
+        /* Modified instructions positioning */
+        #instructions {
+            position: fixed;
+            top: calc(1rem + 70px); /* Adjusted to account for navbar height */
+            left: 20px;
+            padding: 15px;
+            z-index: 100;
+        }
+
+        #interaction-prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            z-index: 100;
+            display: none;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        #mobile-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            display: none;
+            touch-action: manipulation;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            background: rgba(43, 27, 23, 0.7);
+            color: #d4a559;
+            border: 1px solid #8b4513;
+            border-radius: 50%;
+            font-size: 1.5em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.1s ease;
+        }
+
+        .control-btn:active {
+            background: rgba(43, 27, 23, 0.9);
+            transform: scale(0.95);
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        /* Media queries for responsive design */
+        @media (min-width: 768px) {
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0.8rem 1rem;
+            }
+
+            .navbar h1 {
+                margin: 0;
+            }
+
+            .nav-items {
+                width: auto;
+            }
+            
+            /* Adjust instructions position for desktop */
+            #instructions {
+                top: 80px; /* Adjusted for horizontal navbar */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .nav-items {
+                display: none;
+                width: 100%;
+            }
+
+            .nav-items.show {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .auth-box {
+                margin: 1rem;
+            }
+            
+            /* Adjust instructions position for mobile */
+            #instructions {
+                top: 120px; /* Account for taller navbar on mobile */
+                font-size: 0.9em;
+                width: calc(100% - 60px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Zeros</h1>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div class="nav-items" id="navItems">
+            <button class="nav-btn" onclick="showSection('main-content')">Inicio</button>
+            <button class="nav-btn" onclick="window.location.href='juego.html'">Juego</button>
+            <button class="nav-btn" onclick="showSection('statistics-section')">Unidades</button>
+            <button class="nav-btn" onclick="window.location.href='estadisticas.html'">Estadísticas</button>
+            <button class="nav-btn" onclick="window.location.href='contactanos.html'">Contáctanos</button>
+            <button class="nav-btn" onclick="window.location.href='registrate.html'">Registrarse</button>
+            <button class="nav-btn" onclick="window.location.href='iniciar sesion.html'">Iniciar sesión</button>
+        </div>
+    </div>
+    
+    <div id="dialog" class="ui-element"></div>
+    <div id="machine-info" class="ui-element">
+        <h3>Información de la Máquina</h3>
+        <div id="machine-description"></div>
+    </div>
+    <div id="instructions" class="ui-element">
+        PC: WASD para moverse, E para interactuar con inventores<br>
+        Presiona ESPACIO cerca de las máquinas para examinarlas<br>
+        Móvil: Usa los controles en pantalla
+    </div>
+    <div id="interaction-prompt" class="ui-element">
+        Presiona ESPACIO para examinar
+    </div>
+    
+    <script>
+        // Function to toggle mobile menu
+        function toggleMenu() {
+            const navItems = document.getElementById('navItems');
+            navItems.classList.toggle('show');
+        }
+        
+        // Function to show different sections (placeholder)
+        function showSection(sectionId) {
+            console.log(`Showing section: ${sectionId}`);
+            // Implementation would depend on your page structure
+        }
+    </script>
+
+    <div id="mobile-controls">
+        <div class="control-row">
+            <button class="control-btn" id="btn-up">↑</button>
+        </div>
+        <div class="control-row">
+            <button class="control-btn" id="btn-left">←</button>
+            <button class="control-btn" id="btn-down">↓</button>
+            <button class="control-btn" id="btn-right">→</button>
+        </div>
+        <div class="action-buttons">
+            <button class="control-btn" id="btn-interact">E</button>
+            <button class="control-btn" id="btn-space">□</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        function showSection(sectionId) {
+        // For main page section switching
+        if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('game-section').style.display = 'none';
+            document.getElementById('statistics-section').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+        } else {
+            // If on subpage, redirect to index.html with section parameter
+            window.location.href = 'index.html#' + sectionId;
+        }
+    }
+
+    function toggleMenu() {
+        var navItems = document.getElementById('navItems');
+        navItems.classList.toggle('show');
+    }
+    
+    // Check if there's a section to show from URL hash on page load
+    window.onload = function() {
+        if (window.location.hash) {
+            var section = window.location.hash.substring(1);
+            if (document.getElementById(section)) {
+                showSection(section);
+            }
+        }
+    }
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 5, 15);
+        
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 5);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // Create loader
+        const loader = new THREE.TextureLoader();
+
+        // Create floor
+        const floorGeometry = new THREE.PlaneGeometry(50, 50);
+        const floorTexture = loader.load('images/floor.png');
+        floorTexture.wrapS = THREE.RepeatWrapping;
+        floorTexture.wrapT = THREE.RepeatWrapping;
+        floorTexture.repeat.set(5, 5);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            map: floorTexture,
+            side: THREE.DoubleSide
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Dialog state tracking
+        let dialogState = {
+            machineDialogOpen: false,
+            inventorDialogOpen: false
+        };
+
+        // Machine information database
+        const machineInfo = {
+            'spinning-jenny': {
+                name: "Spinning Jenny",
+                description: "Inventada por James Hargreaves en 1764, este dispositivo revolucionario podía hilar múltiples carretes de hilo simultáneamente, aumentando dramáticamente la eficiencia de la producción textil. Permitía que un solo trabajador operara ocho husos a la vez.",
+                inventor: "James Hargreaves",
+                year: 1764,
+                inventorPosition: new THREE.Vector3(10, 0, 10),
+                machineImage: 'images/spinningjenny.png',
+                inventorImage: 'images/james.png'
+            },
+            'steam-engine': {
+                name: "Motor de Vapor Mejorado",
+                description: "El diseño mejorado del motor de vapor de James Watt introdujo el condensador separado en 1769, mejorando enormemente la eficiencia. Esta innovación fue crucial para impulsar la Revolución Industrial, haciendo que la energía de vapor fuera práctica para fábricas y molinos.",
+                inventor: "James Watt",
+                year: 1769,
+                inventorPosition: new THREE.Vector3(-10, 0, 10),
+                machineImage: 'images/steamengine.png',
+                inventorImage: 'images/jameswatt.png'
+            },
+            'power-loom': {
+                name: "Telar Mecánico",
+                description: "El telar mecánico de Edmund Cartwright, patentado por primera vez en 1785, mecanizó el proceso de tejido. Este invento completó la automatización de la producción textil cuando se combinó con las innovaciones en el hilado.",
+                inventor: "Edmund Cartwright",
+                year: 1785,
+                inventorPosition: new THREE.Vector3(10, 0, -10),
+                machineImage: 'images/powerloom.png',
+                inventorImage: 'images/edmund.png'
+            },
+            'water-frame': {
+                name: "Water Frame",
+                description: "El water frame de Richard Arkwright, patentado en 1769, producía un hilo más fuerte que la spinning jenny. Fue la primera máquina que logró hilar algodón en hilo lo suficientemente fuerte para los hilos de urdimbre.",
+                inventor: "Richard Arkwright",
+                year: 1769,
+                inventorPosition: new THREE.Vector3(-10, 0, -10),
+                machineImage: 'images/waterframe.png',
+                inventorImage: 'images/richard.png'
+            }
+        };
+
+        // Create machine with specific image
+        function createMachine(type, position) {
+            const group = new THREE.Group();
+            const info = machineInfo[type];
+            
+            const machineGeometry = new THREE.PlaneGeometry(3, 4);
+            const machineTexture = loader.load(info.machineImage);
+            const machineMaterial = new THREE.MeshStandardMaterial({ 
+                map: machineTexture,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            
+            const machineMesh = new THREE.Mesh(machineGeometry, machineMaterial);
+            machineMesh.position.y = 2;
+            machineMesh.rotation.y = Math.random() * Math.PI;
+            group.add(machineMesh);
+            
+            const baseGeometry = new THREE.BoxGeometry(3.5, 0.5, 3.5);
+            const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            base.position.y = -0.25;
+            base.receiveShadow = true;
+            group.add(base);
+            
+            group.position.copy(position);
+            group.userData = { 
+                type: type, 
+                info: machineInfo[type],
+                highlight: false
+            };
+            
+            return group;
+        }
+        
+        // Create inventor with specific image
+        function createInventor(info) {
+            const group = new THREE.Group();
+            
+            const inventorGeometry = new THREE.PlaneGeometry(2, 4);
+            const inventorTexture = loader.load(info.inventorImage);
+            const inventorMaterial = new THREE.MeshStandardMaterial({ 
+                map: inventorTexture, 
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            
+            const inventorMesh = new THREE.Mesh(inventorGeometry, inventorMaterial);
+            inventorMesh.position.y = 2;
+            group.add(inventorMesh);
+            
+            const plateGeometry = new THREE.PlaneGeometry(2.2, 0.5);
+            const plateMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0xd4a559
+            });
+            const namePlate = new THREE.Mesh(plateGeometry, plateMaterial);
+            namePlate.position.set(0, 0.25, 0.1);
+            group.add(namePlate);
+            
+            group.position.copy(info.inventorPosition);
+            group.lookAt(new THREE.Vector3(0, 0, 0));
+            group.userData = { 
+                type: 'inventor',
+                info: info,
+                highlight: false
+            };
+            
+            return group;
+        }
+
+        // Create player character
+        function createPlayer() {
+            const group = new THREE.Group();
+            
+            const playerGeometry = new THREE.PlaneGeometry(1.5, 3);
+            const playerTexture = loader.load('images/jameswatt.png');
+            const playerMaterial = new THREE.MeshStandardMaterial({ 
+                map: playerTexture,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            
+            const playerMesh = new THREE.Mesh(playerGeometry, playerMaterial);
+            playerMesh.position.y = 1.5;
+            group.add(playerMesh);
+            
+            const shadowGeometry = new THREE.CircleGeometry(0.5, 16);
+            const shadowMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x000000,
+                transparent: true,
+                opacity: 0.3
+            });
+            const shadow = new THREE.Mesh(shadowGeometry, shadowMaterial);
+            shadow.rotation.x = -Math.PI / 2;
+            shadow.position.y = 0.01;
+            group.add(shadow);
+            
+            return group;
+        }
+
+        // Create game objects
+        const machines = [
+            createMachine('spinning-jenny', new THREE.Vector3(8, 0, 8)),
+            createMachine('steam-engine', new THREE.Vector3(-8, 0, 8)),
+            createMachine('power-loom', new THREE.Vector3(8, 0, -8)),
+            createMachine('water-frame', new THREE.Vector3(-8, 0, -8))
+        ];
+        machines.forEach(machine => scene.add(machine));
+        
+        const inventors = [];
+        for (const [key, info] of Object.entries(machineInfo)) {
+            const inventor = createInventor(info);
+            inventors.push(inventor);
+            scene.add(inventor);
+        }
+        
+        const player = createPlayer();
+        scene.add(player);
+
+        // Controls setup
+        const keys = {};
+        document.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
+        document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+        // Mobile controls
+        const mobileControls = document.getElementById('mobile-controls');
+        let isMobile = false;
+
+        function checkMobile() {
+            isMobile = window.innerWidth <= 768;
+            mobileControls.style.display = isMobile ? 'block' : 'none';
+        }
+        window.addEventListener('resize', checkMobile);
+        checkMobile();
+
+        // Enhanced mobile controls
+        let touchStartTime = 0;
+        const mobileButtons = document.querySelectorAll('.control-btn');
+
+        mobileButtons.forEach(button => {
+            button.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touchStartTime = Date.now();
+                const key = button.id.replace('btn-', '');
+                switch(key) {
+                    case 'up': keys['w'] = true; break;
+                    case 'down': keys['s'] = true; break;
+                    case 'left': keys['a'] = true; break;
+                    case 'right': keys['d'] = true; break;
+                    case 'interact': keys['e'] = true; break;
+                    case 'space': keys
+                    case 'space': keys[' '] = true; break;
+                }
+            });
+
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const key = button.id.replace('btn-', '');
+                switch(key) {
+                    case 'up': keys['w'] = false; break;
+                    case 'down': keys['s'] = false; break;
+                    case 'left': keys['a'] = false; break;
+                    case 'right': keys['d'] = false; break;
+                    case 'interact': keys['e'] = false; break;
+                    case 'space': keys[' '] = false; break;
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Player movement function
+        function movePlayer() {
+            const moveSpeed = 0.15;
+            const rotationSpeed = 0.1;
+            let moved = false;
+            
+            if (keys['w']) {
+                player.position.z -= moveSpeed;
+                moved = true;
+            }
+            if (keys['s']) {
+                player.position.z += moveSpeed;
+                moved = true;
+            }
+            if (keys['a']) {
+                player.position.x -= moveSpeed;
+                player.rotation.y += rotationSpeed;
+                moved = true;
+            }
+            if (keys['d']) {
+                player.position.x += moveSpeed;
+                player.rotation.y -= rotationSpeed;
+                moved = true;
+            }
+            
+            // Update camera to follow player
+            camera.position.x = player.position.x;
+            camera.position.z = player.position.z + 15;
+            camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+            
+            return moved;
+        }
+
+        // Machine interaction function
+        function checkMachineInteraction() {
+            const interactionPrompt = document.getElementById('interaction-prompt');
+            const machineInfoPanel = document.getElementById('machine-info');
+            const machineDescription = document.getElementById('machine-description');
+            
+            let nearMachine = false;
+            machines.forEach(machine => {
+                const distance = player.position.distanceTo(machine.position);
+                if (distance < 4) {
+                    nearMachine = true;
+                    interactionPrompt.style.display = 'block';
+                    interactionPrompt.innerText = 'Presiona ESPACIO para examinar';
+                    
+                    if (keys[' ']) {
+                        dialogState.machineDialogOpen = !dialogState.machineDialogOpen;
+                        const info = machine.userData.info;
+                        
+                        if (dialogState.machineDialogOpen) {
+                            machineDescription.innerHTML = `
+                                <h4>${info.name} (${info.year})</h4>
+                                <p><em>Inventado por ${info.inventor}</em></p>
+                                <p>${info.description}</p>
+                            `;
+                            machineInfoPanel.style.display = 'block';
+                            machine.userData.highlight = true;
+                        } else {
+                            machineInfoPanel.style.display = 'none';
+                            machine.userData.highlight = false;
+                        }
+                        
+                        // Reset key state
+                        keys[' '] = false;
+                    }
+                }
+            });
+            
+            if (!nearMachine) {
+                interactionPrompt.style.display = 'none';
+                dialogState.machineDialogOpen = false;
+                machineInfoPanel.style.display = 'none';
+                machines.forEach(machine => {
+                    machine.userData.highlight = false;
+                });
+            }
+        }
+
+        // Inventor interaction function
+        function checkInventorInteraction() {
+            const dialogElement = document.getElementById('dialog');
+            const interactionPrompt = document.getElementById('interaction-prompt');
+            
+            let nearInventor = false;
+            inventors.forEach(inventor => {
+                const distance = player.position.distanceTo(inventor.position);
+                if (distance < 3) {
+                    nearInventor = true;
+                    interactionPrompt.style.display = 'block';
+                    interactionPrompt.innerText = 'Presiona E para hablar';
+                    
+                    if (keys['e']) {
+                        dialogState.inventorDialogOpen = !dialogState.inventorDialogOpen;
+                        const info = inventor.userData.info;
+                        
+                        if (dialogState.inventorDialogOpen) {
+                            dialogElement.innerHTML = `
+                                <h3>${info.inventor}</h3>
+                                <p>"¡Bienvenido! Soy el inventor del ${info.name} en ${info.year}. 
+                                ¿Te gustaría aprender más sobre mi invento?"</p>
+                            `;
+                            dialogElement.style.display = 'block';
+                            inventor.userData.highlight = true;
+                        } else {
+                            dialogElement.style.display = 'none';
+                            inventor.userData.highlight = false;
+                        }
+                        
+                        // Reset key state
+                        keys['e'] = false;
+                    }
+                }
+            });
+            
+            if (!nearInventor) {
+                dialogState.inventorDialogOpen = false;
+                dialogElement.style.display = 'none';
+                inventors.forEach(inventor => {
+                    inventor.userData.highlight = false;
+                });
+                if (interactionPrompt.innerText === 'Presiona E para hablar') {
+                    interactionPrompt.style.display = 'none';
+                }
+            }
+        }
+
+        // Update highlights
+        function updateHighlights() {
+            const time = Date.now() * 0.001;
+            const pulseScale = 1 + 0.1 * Math.sin(time * 4);
+            
+            machines.forEach(machine => {
+                if (machine.userData.highlight) {
+                    machine.scale.set(pulseScale, pulseScale, pulseScale);
+                } else {
+                    machine.scale.set(1, 1, 1);
+                }
+            });
+            
+            inventors.forEach(inventor => {
+                if (inventor.userData.highlight) {
+                    inventor.scale.set(pulseScale, pulseScale, pulseScale);
+                } else {
+                    inventor.scale.set(1, 1, 1);
+                }
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const playerMoved = movePlayer();
+            
+            checkMachineInteraction();
+            checkInventorInteraction();
+            
+            updateHighlights();
+            
+            if (!playerMoved) {
+                player.children[0].position.y = 1.5 + 0.05 * Math.sin(Date.now() * 0.002);
+            }
+            
+            machines.forEach(machine => {
+                machine.rotation.y += 0.001;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Start the animation
+        animate();
+    </script>
+</body>
+</html>                   
